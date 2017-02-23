@@ -1,0 +1,19 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "neh/nSlew6ZRjfYHk+D0UV+dYx4=",
+			"path": "github.com/cplusgo/go-library",
+			"revision": "91944aeeb5e83e52e619c49c772e9b88d4f91fcd",
+			"revisionTime": "2017-02-23T10:44:48Z"
+		},
+		{
+			"checksumSHA1": "C3BjwYKPuHMhNLtmLpZe9UMbrL4=",
+			"path": "github.com/cplusgo/go-library/example",
+			"revision": "91944aeeb5e83e52e619c49c772e9b88d4f91fcd",
+			"revisionTime": "2017-02-23T10:44:48Z"
+		}
+	],
+	"rootPath": "github.com/cplusgo/live-chat"
+}
