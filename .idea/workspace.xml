@@ -2,21 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9385652a-14e0-4c4c-ad56-3977765aa35c" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/GOPATH__live_chat_.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Go_SDK.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ChatPolicyBootstrap.go" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ChatPushBootstrap.go" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ChatServerBootstrap.go" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ChatStatusBootstrap.go" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/policy/PolicyServer.go" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/push/PushServer.go" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/server/ChatClient.go" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/server/ChatMessage.go" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/server/ChatRoom.go" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/server/ChatServer.go" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/server/RoomManager.go" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/status/StatusServer.go" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/ChatClient.go" afterPath="$PROJECT_DIR$/server/ChatClient.go" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/ChatRoom.go" afterPath="$PROJECT_DIR$/server/ChatRoom.go" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -35,7 +22,7 @@
         <entry file="file://$PROJECT_DIR$/ChatServerBootstrap.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="110">
-              <caret line="5" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="15" selection-end-column="1" />
+              <caret line="5" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="15" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -45,7 +32,7 @@
         <entry file="file://$PROJECT_DIR$/ChatStatusBootstrap.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="110">
-              <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+              <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -54,8 +41,8 @@
       <file leaf-file-name="ChatRoom.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/ChatRoom.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="66">
-              <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+            <state relative-caret-position="550">
+              <caret line="25" column="31" lean-forward="true" selection-start-line="25" selection-start-column="31" selection-end-line="25" selection-end-column="31" />
               <folding />
             </state>
           </provider>
@@ -65,7 +52,7 @@
         <entry file="file://$PROJECT_DIR$/server/ChatClient.go">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="242">
-              <caret line="11" column="58" lean-forward="false" selection-start-line="11" selection-start-column="58" selection-end-line="11" selection-end-column="58" />
+              <caret line="11" column="28" lean-forward="false" selection-start-line="11" selection-start-column="28" selection-end-line="11" selection-end-column="28" />
               <folding />
             </state>
           </provider>
@@ -157,6 +144,7 @@
         <option value="$PROJECT_DIR$/server/ChatServer.go" />
         <option value="$PROJECT_DIR$/status/StatusServer.go" />
         <option value="$PROJECT_DIR$/server/ChatMessage.go" />
+        <option value="$PROJECT_DIR$/server/ChatRoom.go" />
         <option value="$PROJECT_DIR$/server/ChatClient.go" />
       </list>
     </option>
@@ -361,7 +349,7 @@
         <state relative-caret-position="22">
           <caret line="1" column="0" lean-forward="true" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
           <folding>
-            <element signature="e#14#64#0" expanded="true" />
+            <element signature="e#14#64#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -393,7 +381,7 @@
     <entry file="file://$PROJECT_DIR$/ChatServerBootstrap.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="110">
-          <caret line="5" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="15" selection-end-column="1" />
+          <caret line="5" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="15" selection-end-column="1" />
           <folding />
         </state>
       </provider>
@@ -401,7 +389,7 @@
     <entry file="file://$PROJECT_DIR$/ChatStatusBootstrap.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="110">
-          <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+          <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -446,14 +434,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/ChatRoom.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/server/ChatMessage.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="44">
@@ -462,10 +442,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/server/ChatRoom.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="550">
+          <caret line="25" column="31" lean-forward="true" selection-start-line="25" selection-start-column="31" selection-end-line="25" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/server/ChatClient.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="242">
-          <caret line="11" column="58" lean-forward="false" selection-start-line="11" selection-start-column="58" selection-end-line="11" selection-end-column="58" />
+          <caret line="11" column="28" lean-forward="false" selection-start-line="11" selection-start-column="28" selection-end-line="11" selection-end-column="28" />
           <folding />
         </state>
       </provider>
