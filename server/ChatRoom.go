@@ -16,13 +16,13 @@ func (this *ChatRoom) Add(client *ChatClient) {
 }
 
 func (this *ChatRoom) Remove(client *ChatClient) {
-	if ok, _ := this.clients[client]; ok {
+	if ok := this.clients[client]; ok {
 		delete(this.clients, client)
 	}
 }
 
 func (this *ChatRoom) SendMessage(message *ChatMessage) {
-	for _,client := range this.clients{
+	for _, client := range this.clients {
 		client.SendMessage(message)
 	}
 }

@@ -1,7 +1,7 @@
 package server
 
 type ChatClient struct {
-
+	RoomId string
 }
 
 func (this *ChatClient) IsWritable() bool {
