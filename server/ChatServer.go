@@ -26,17 +26,17 @@ func NewChatServer() *ChatServer {
 func (this *ChatServer) Start() {
 	flag.Parse()
 	log.SetFlags(0)
-	http.HandleFunc("/echo", this.Accept)
+	http.HandleFunc("/websocket", this.accept)
 	var addr = flag.String("addr", "localhost:8080", "http service address")
 	log.Fatal(http.ListenAndServe(*addr, nil))
 }
 
-func (this *ChatServer) Accept(w http.ResponseWriter, r *http.Request) {
-	c, err := this.upgrader.Upgrade(w, r, nil)
+func (this *ChatServer) accept(w http.ResponseWriter, r *http.Request) {
+	conn, err := this.upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Print("upgrade:", err)
 		return
 	}
-	wsHandler := &WsHandler{wsConn: c}
+	wsHandler := NewChatClient(conn)
 	go_library.Run(wsHandler)
 }

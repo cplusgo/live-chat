@@ -4,27 +4,47 @@ import "errors"
 
 type RoomManager struct {
 	rooms map[string]*ChatRoom
+	deleteClientChannel chan *ChatClient
+	addClientChannel    chan *ChatClient
 }
 
 func NewRoomManager() *RoomManager {
 	manager := &RoomManager{}
+	go manager.Run()
 	return manager
 }
 
-func (this *RoomManager) AddClient(client *ChatClient) {
-	if _, ok := this.rooms[client.RoomId]; !ok {
-		this.rooms[client.RoomId] = NewChatRoom(client.RoomId)
-	}
-	this.rooms[client.RoomId].Add(client)
-}
-
-func (this *RoomManager) RemoveClient(client *ChatClient)  {
-	if _, ok := this.rooms[client.RoomId]; ok {
-		this.rooms[client.RoomId].Remove(client)
+func (this *RoomManager) Run()  {
+	for {
+		select {
+		case client := <-this.deleteClientChannel:
+			this.removeClient(client)
+		case client := <-this.addClientChannel:
+			this.addClient(client)
+		}
 	}
 }
 
-func (this *RoomManager) GetRoom(roomId string) (*ChatRoom, error)  {
+func (this *RoomManager) addClient(client *ChatClient) {
+	if _, ok := this.rooms[client.roomId]; !ok {
+		this.rooms[client.roomId] = NewChatRoom(client.roomId)
+	}
+	this.rooms[client.roomId].add(client)
+}
+
+func (this *RoomManager) sendMessage(roomId int64, message *ChatMessage)  {
+	if room, ok := this.rooms[roomId]; ok {
+		room.broadcastChannel <- message
+	}
+}
+
+func (this *RoomManager) removeClient(client *ChatClient)  {
+	if room, ok := this.rooms[client.roomId]; ok {
+		room.remove(client)
+	}
+}
+
+func (this *RoomManager) GetRoom(roomId int64) (*ChatRoom, error)  {
 	if _, ok := this.rooms[roomId]; ok {
 		return this.rooms[roomId], nil
 	}

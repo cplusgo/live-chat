@@ -2,84 +2,83 @@ package server
 
 import (
 	"github.com/gorilla/websocket"
-	"log"
 	"encoding/json"
 )
 
 type ChatClient struct {
 	wsConn       *websocket.Conn
-	RoomId       string
-	WriteChannel chan []byte
-	ReadChannel  chan []byte
+	roomId       int64
+	writeChannel chan *ChatMessage
 }
 
-func (this *ChatClient) Close() {
-	this.wsConn.Close()
+func NewChatClient(conn *websocket.Conn) *ChatClient {
+	writeChannel := make(chan *ChatMessage)
+	client := &ChatClient{wsConn:conn, writeChannel:writeChannel}
+	go client.readMessage()
+	return client
 }
 
-func (this *ChatClient) Try() {
+func (this *ChatClient) close() {
+	if this.roomId != 0 {
+		this.wsConn.Close()
+		roomManager.deleteClientChannel <- this
+	}
+}
+
+func (this *ChatClient) readMessage() {
 	for {
-		err := this.ReadMessage()
+		_, bytes, err := this.wsConn.ReadMessage()
 		if err != nil {
-			break
+			this.close()
+		}
+		var data interface{}
+		json.Unmarshal(bytes, &data)
+		body := data.(map[string]interface{})
+		protocolId := 0
+		if id, ok := body[PROTOCOL_ID]; ok {
+			protocolId = id.(int)
+		}
+		switch protocolId {
+		case P_LOGIN_ROOM:
+			this.registerInRoom(body)
+		case P_NORMAL_MSG:
+			message := NewChatMessage(this.roomId, body, bytes)
+			this.broadcastInRoom(message)
 		}
 	}
 }
 
-func (this *ChatClient) ReadMessage() error {
-	_, message, err := this.wsConn.ReadMessage()
+func (this *ChatClient) broadcastInRoom(message *ChatMessage)  {
+	roomManager.sendMessage(this.roomId, message)
+}
+
+func (this *ChatClient) registerInRoom(jsonBody map[string]interface{})  {
+	if roomId,ok := jsonBody[ROOM_ID]; ok {
+		this.roomId = roomId.(int64)
+		roomManager.addClientChannel <- this
+	}
+}
+
+func (this *ChatClient) writeMessage(message *ChatMessage) {
+	err := this.wsConn.WriteMessage(websocket.TextMessage, message.originData)
 	if err != nil {
-		log.Println("read:", err)
-		this.Close()
-		return err
+		this.close()
 	}
-	this.Process(message)
-	return nil
-}
-
-func (this *ChatClient) WriteMessage(message []byte) {
-	err := this.wsConn.WriteMessage(websocket.TextMessage, message)
-	if err != nil {
-		log.Println("write:", err)
-		this.Close()
-	}
-}
-
-func (this *ChatClient) Process(bytes []byte) {
-	var data interface{}
-	json.Unmarshal(bytes, &data)
-	body := data.(map[string]interface{})
-	protocolId := 0
-	if id, ok := body[PROTOCOL_ID]; ok {
-		protocolId = id.(int)
-	}
-	switch protocolId {
-	case P_LOGIN_ROOM:
-		this.AddSelfInRoom(body)
-	}
-}
-
-func (this *ChatClient) AddSelfInRoom(body map[string]interface{}) {
-	roomManager.AddClient(this)
 }
 
 func (this *ChatClient) IsWritable() bool {
 	return true
 }
 
-func (this *ChatClient) BroadcastInRoom() {
-
-}
-
-func (this *ChatClient) SendMessage(message *ChatMessage) {
-	if this.IsWritable() {
-		room, err := roomManager.GetRoom(this.RoomId)
-		if err == nil {
-			room.broadcastChannel <- message
+func (this *ChatClient) Try() {
+	for {
+		select {
+		case message := <-this.writeChannel:
+			this.writeMessage(message)
 		}
 	}
 }
 
 func (this *ChatClient) Catch(err interface{}) {
-	this.Close()
+	this.close()
 }

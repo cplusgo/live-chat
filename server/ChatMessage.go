@@ -1,7 +1,17 @@
 package server
 
 type ChatMessage struct {
-	RoomId      string
-	IsBroadcast bool
-	Body        map[string]interface{}
+	roomId      int64
+	isBroadcast bool
+	body        map[string]interface{}
+	originData []byte
+}
+
+func NewChatMessage(roomId int64, body map[string]interface{}, originData []byte) *ChatMessage {
+	message := &ChatMessage{
+		roomId:roomId,
+		body:body,
+		originData:originData,
+	}
+	return message
 }

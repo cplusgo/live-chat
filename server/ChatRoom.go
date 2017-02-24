@@ -1,38 +1,45 @@
 package server
 
 type ChatRoom struct {
-	roomId         string
-	clients        map[*ChatClient]*ChatClient
-	broadcastChannel *ChatMessage
+	roomId              int64
+	clients             map[*ChatClient]*ChatClient
+	broadcastChannel    chan *ChatMessage
+
 }
 
-func NewChatRoom(roomId string) *ChatRoom {
+func NewChatRoom(roomId int64) *ChatRoom {
 	clients := make(map[*ChatClient]*ChatClient)
-	chatroom := &ChatRoom{roomId: roomId, clients: clients}
+	broadcastChan := make(chan *ChatMessage)
+	chatroom := &ChatRoom{
+		roomId:              roomId,
+		clients:             clients,
+		broadcastChannel:    broadcastChan,
+	}
+	go chatroom.run()
 	return chatroom
 }
 
-func (this *ChatRoom) Add(client *ChatClient) {
+func (this *ChatRoom) add(client *ChatClient) {
 	this.clients[client] = client
 }
 
-func (this *ChatRoom) Remove(client *ChatClient) {
+func (this *ChatRoom) remove(client *ChatClient) {
 	if _, ok := this.clients[client]; ok {
 		delete(this.clients, client)
 	}
 }
 
-func (this *ChatRoom) Run()  {
+func (this *ChatRoom) run() {
 	for {
 		select {
 		case message := <-this.broadcastChannel:
-			this.BroadcastMessage(message)
+			this.broadcastMessage(message)
 		}
 	}
 }
 
-func (this *ChatRoom) BroadcastMessage(message *ChatMessage) {
+func (this *ChatRoom) broadcastMessage(message *ChatMessage) {
 	for _, client := range this.clients {
-		client.SendMessage(message)
+		client.writeChannel <- message
 	}
 }
