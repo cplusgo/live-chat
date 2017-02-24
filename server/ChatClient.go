@@ -31,6 +31,7 @@ func (this *ChatClient) readMessage() {
 		_, bytes, err := this.wsConn.ReadMessage()
 		if err != nil {
 			this.close()
+			break
 		}
 		log.Println(string(bytes))
 		var message ChatMessage
