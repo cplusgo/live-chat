@@ -3,13 +3,20 @@ package server
 import "errors"
 
 type RoomManager struct {
-	rooms map[string]*ChatRoom
+	rooms map[int64]*ChatRoom
 	deleteClientChannel chan *ChatClient
 	addClientChannel    chan *ChatClient
 }
 
 func NewRoomManager() *RoomManager {
-	manager := &RoomManager{}
+	deleteChan := make(chan *ChatClient)
+	addChan := make(chan *ChatClient)
+	rooms := make(map[int64]*ChatRoom)
+	manager := &RoomManager{
+		deleteClientChannel:deleteChan,
+		addClientChannel:addChan,
+		rooms:rooms,
+	}
 	go manager.Run()
 	return manager
 }

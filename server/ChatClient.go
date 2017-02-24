@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/gorilla/websocket"
 	"encoding/json"
+	"log"
 )
 
 type ChatClient struct {
@@ -13,7 +14,7 @@ type ChatClient struct {
 
 func NewChatClient(conn *websocket.Conn) *ChatClient {
 	writeChannel := make(chan *ChatMessage)
-	client := &ChatClient{wsConn:conn, writeChannel:writeChannel}
+	client := &ChatClient{wsConn: conn, writeChannel: writeChannel}
 	go client.readMessage()
 	return client
 }
@@ -31,32 +32,30 @@ func (this *ChatClient) readMessage() {
 		if err != nil {
 			this.close()
 		}
-		var data interface{}
-		json.Unmarshal(bytes, &data)
-		body := data.(map[string]interface{})
-		protocolId := 0
-		if id, ok := body[PROTOCOL_ID]; ok {
-			protocolId = id.(int)
-		}
-		switch protocolId {
-		case P_LOGIN_ROOM:
-			this.registerInRoom(body)
-		case P_NORMAL_MSG:
-			message := NewChatMessage(this.roomId, body, bytes)
-			this.broadcastInRoom(message)
+		log.Println(string(bytes))
+		var message ChatMessage
+		err = json.Unmarshal(bytes, &message)
+		if err != nil {
+			log.Println(err)
+		} else {
+			protocolId := message.ProtocolId
+			message.originData = bytes
+			switch protocolId {
+			case P_LOGIN_ROOM:
+				this.registerInRoom(&message)
+			case P_NORMAL_MSG:
+				this.broadcastInRoom(&message)
+			}
 		}
 	}
 }
 
-func (this *ChatClient) broadcastInRoom(message *ChatMessage)  {
+func (this *ChatClient) broadcastInRoom(message *ChatMessage) {
 	roomManager.sendMessage(this.roomId, message)
 }
 
-func (this *ChatClient) registerInRoom(jsonBody map[string]interface{})  {
-	if roomId,ok := jsonBody[ROOM_ID]; ok {
-		this.roomId = roomId.(int64)
-		roomManager.addClientChannel <- this
-	}
+func (this *ChatClient) registerInRoom(message *ChatMessage) {
+	roomManager.addClientChannel <- this
 }
 
 func (this *ChatClient) writeMessage(message *ChatMessage) {
