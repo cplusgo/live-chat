@@ -1,16 +1,8 @@
 package main
 
+import "github.com/cplusgo/live-chat/server"
 
-
-type ChatServerBootstrap struct {
-	
-}
-
-func (this *ChatServerBootstrap) Start()  {
-	
-}
-
-func main()  {
-	bootstrap := &ChatServerBootstrap{}
-	bootstrap.Start()
+func main() {
+	chatServer := server.NewChatServer()
+	chatServer.Start()
 }

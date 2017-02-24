@@ -16,7 +16,7 @@ func (this *ChatRoom) Add(client *ChatClient) {
 }
 
 func (this *ChatRoom) Remove(client *ChatClient) {
-	if ok := this.clients[client]; ok {
+	if _, ok := this.clients[client]; ok {
 		delete(this.clients, client)
 	}
 }

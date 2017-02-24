@@ -13,6 +13,22 @@
 			"path": "github.com/cplusgo/go-library/example",
 			"revision": "91944aeeb5e83e52e619c49c772e9b88d4f91fcd",
 			"revisionTime": "2017-02-23T10:44:48Z"
+		},
+		{
+			"checksumSHA1": "jb1pFNNVYzpY4Mz09WEWeTNng40=",
+			"path": "github.com/gorilla/websocket",
+			"revision": "3f3e394da2b801fbe732a935ef40724762a67a07",
+			"revisionTime": "2017-02-18T16:27:10Z"
+		},
+		{
+			"path": "github.com/gorilla/websocket/example",
+			"revision": ""
+		},
+		{
+			"checksumSHA1": "s0FPNPp4fuJHPXkliBNQ61EMxmE=",
+			"path": "github.com/gorilla/websocket/examples",
+			"revision": "3f3e394da2b801fbe732a935ef40724762a67a07",
+			"revisionTime": "2017-02-18T16:27:10Z"
 		}
 	],
 	"rootPath": "github.com/cplusgo/live-chat"

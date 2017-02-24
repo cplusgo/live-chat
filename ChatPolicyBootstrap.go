@@ -6,7 +6,7 @@ type ChatPolicyBootstrap struct {
 
 }
 
-func (this *ChatPolicyBootstrap) Start()  {
+func (this *ChatPolicyBootstrap) Start() {
 
 }
 
