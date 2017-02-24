@@ -1,8 +1,9 @@
 package server
 
 type ChatRoom struct {
-	roomId  string
-	clients map[*ChatClient]*ChatClient
+	roomId         string
+	clients        map[*ChatClient]*ChatClient
+	broadcastChannel *ChatMessage
 }
 
 func NewChatRoom(roomId string) *ChatRoom {
@@ -21,7 +22,16 @@ func (this *ChatRoom) Remove(client *ChatClient) {
 	}
 }
 
-func (this *ChatRoom) SendMessage(message *ChatMessage) {
+func (this *ChatRoom) Run()  {
+	for {
+		select {
+		case message := <-this.broadcastChannel:
+			this.BroadcastMessage(message)
+		}
+	}
+}
+
+func (this *ChatRoom) BroadcastMessage(message *ChatMessage) {
 	for _, client := range this.clients {
 		client.SendMessage(message)
 	}

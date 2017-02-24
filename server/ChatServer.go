@@ -13,7 +13,13 @@ type ChatServer struct {
 }
 
 func NewChatServer() *ChatServer {
-	chatServer := &ChatServer{upgrader: websocket.Upgrader{}}
+	chatServer := &ChatServer{
+		upgrader: websocket.Upgrader{
+			CheckOrigin: func(r *http.Request) bool {
+				return true
+			},
+		},
+	}
 	return chatServer
 }
 
@@ -31,6 +37,6 @@ func (this *ChatServer) Accept(w http.ResponseWriter, r *http.Request) {
 		log.Print("upgrade:", err)
 		return
 	}
-	wsHandler := &WsHandler{WsConn:c}
+	wsHandler := &WsHandler{wsConn: c}
 	go_library.Run(wsHandler)
 }

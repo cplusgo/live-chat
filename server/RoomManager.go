@@ -30,3 +30,5 @@ func (this *RoomManager) GetRoom(roomId string) (*ChatRoom, error)  {
 	}
 	return nil, errors.New("chat room not exist")
 }
+
+var roomManager *RoomManager = NewRoomManager()
