@@ -10,11 +10,13 @@ type ChatClient struct {
 	wsConn       *websocket.Conn
 	roomId       int64
 	writeChannel chan *ChatMessage
+	stopChannel  chan bool
 }
 
 func NewChatClient(conn *websocket.Conn) *ChatClient {
 	writeChannel := make(chan *ChatMessage)
-	client := &ChatClient{wsConn: conn, writeChannel: writeChannel}
+	stopChannel := make(chan bool)
+	client := &ChatClient{wsConn: conn, writeChannel: writeChannel, stopChannel: stopChannel}
 	go client.readMessage()
 	return client
 }
@@ -22,6 +24,7 @@ func NewChatClient(conn *websocket.Conn) *ChatClient {
 func (this *ChatClient) close() {
 	if this.roomId != 0 {
 		this.wsConn.Close()
+		this.stopChannel <- true
 		roomManager.deleteClientChannel <- this
 	}
 }
@@ -75,6 +78,8 @@ func (this *ChatClient) Try() {
 		select {
 		case message := <-this.writeChannel:
 			this.writeMessage(message)
+		case <-this.stopChannel:
+			return
 		}
 	}
 }
