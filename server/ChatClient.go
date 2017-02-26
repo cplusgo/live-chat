@@ -63,13 +63,16 @@ func (this *ChatClient) registerInRoom(message *ChatMessage) {
 }
 
 func (this *ChatClient) writeMessage(message *ChatMessage) {
+	if !this.isWritable() {
+		return
+	}
 	err := this.wsConn.WriteMessage(websocket.TextMessage, message.originData)
 	if err != nil {
 		this.close()
 	}
 }
 
-func (this *ChatClient) IsWritable() bool {
+func (this *ChatClient) isWritable() bool {
 	return true
 }
 
