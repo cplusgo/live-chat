@@ -1,16 +1,16 @@
 package server
 
-type ChatRoom struct {
+type ChatChannel struct {
 	roomId              int64
 	clients             map[*ChatClient]*ChatClient
 	broadcastChannel    chan *ChatMessage
 
 }
 
-func NewChatRoom(roomId int64) *ChatRoom {
+func NewChatChannel(roomId int64) *ChatChannel {
 	clients := make(map[*ChatClient]*ChatClient)
 	broadcastChan := make(chan *ChatMessage)
-	chatroom := &ChatRoom{
+	chatroom := &ChatChannel{
 		roomId:              roomId,
 		clients:             clients,
 		broadcastChannel:    broadcastChan,
@@ -19,17 +19,17 @@ func NewChatRoom(roomId int64) *ChatRoom {
 	return chatroom
 }
 
-func (this *ChatRoom) add(client *ChatClient) {
+func (this *ChatChannel) add(client *ChatClient) {
 	this.clients[client] = client
 }
 
-func (this *ChatRoom) remove(client *ChatClient) {
+func (this *ChatChannel) remove(client *ChatClient) {
 	if _, ok := this.clients[client]; ok {
 		delete(this.clients, client)
 	}
 }
 
-func (this *ChatRoom) run() {
+func (this *ChatChannel) run() {
 	for {
 		select {
 		case message := <-this.broadcastChannel:
@@ -38,7 +38,7 @@ func (this *ChatRoom) run() {
 	}
 }
 
-func (this *ChatRoom) broadcastMessage(message *ChatMessage) {
+func (this *ChatChannel) broadcastMessage(message *ChatMessage) {
 	for _, client := range this.clients {
 		client.writeChannel <- message
 	}

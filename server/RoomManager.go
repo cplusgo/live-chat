@@ -3,7 +3,7 @@ package server
 import "errors"
 
 type RoomManager struct {
-	rooms map[int64]*ChatRoom
+	rooms map[int64]*ChatChannel
 	deleteClientChannel chan *ChatClient
 	addClientChannel    chan *ChatClient
 }
@@ -11,7 +11,7 @@ type RoomManager struct {
 func NewRoomManager() *RoomManager {
 	deleteChan := make(chan *ChatClient)
 	addChan := make(chan *ChatClient)
-	rooms := make(map[int64]*ChatRoom)
+	rooms := make(map[int64]*ChatChannel)
 	manager := &RoomManager{
 		deleteClientChannel:deleteChan,
 		addClientChannel:addChan,
@@ -34,7 +34,7 @@ func (this *RoomManager) Run()  {
 
 func (this *RoomManager) addClient(client *ChatClient) {
 	if _, ok := this.rooms[client.roomId]; !ok {
-		this.rooms[client.roomId] = NewChatRoom(client.roomId)
+		this.rooms[client.roomId] = NewChatChannel(client.roomId)
 	}
 	this.rooms[client.roomId].add(client)
 }
@@ -51,7 +51,7 @@ func (this *RoomManager) removeClient(client *ChatClient)  {
 	}
 }
 
-func (this *RoomManager) GetRoom(roomId int64) (*ChatRoom, error)  {
+func (this *RoomManager) GetRoom(roomId int64) (*ChatChannel, error)  {
 	if _, ok := this.rooms[roomId]; ok {
 		return this.rooms[roomId], nil
 	}

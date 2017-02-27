@@ -1,0 +1,8 @@
+package push
+
+
+const (
+	MESSAGE_BROATCAST = 1
+	MESSAGE_KILL_ME = 2
+	MESSAGE_REGISTER = 3
+)
