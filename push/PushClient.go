@@ -23,6 +23,7 @@ func (this *PushClient) Try() {
 		}
 		var message PushMessage
 		json.Unmarshal(originData, &message)
+		message.From = this
 		switch(message.ProtocolId) {
 		case MESSAGE_BROATCAST:
 			pushClientManager.broadcastChannel <- &message
@@ -34,7 +35,7 @@ func (this *PushClient) Try() {
 	}
 }
 
-func (this *PushClient) broadcast(message *PushMessage)  {
+func (this *PushClient) register()  {
 	
 }
 

@@ -66,6 +66,7 @@ func (this *ChatClient) writeMessage(message *ChatMessage) {
 	if !this.isWritable() {
 		return
 	}
+
 	err := this.wsConn.WriteMessage(websocket.TextMessage, message.originData)
 	if err != nil {
 		this.close()

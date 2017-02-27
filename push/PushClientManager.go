@@ -49,7 +49,9 @@ func (this *PushClientManager) deleteClient(client *PushClient) {
 
 func (this *PushClientManager) broadcast(message *PushMessage) {
 	for _, client := range this.clients {
-		client.writeChannel <- message
+		if client != message.From {
+			client.writeChannel <- message
+		}
 	}
 }
 
