@@ -15,7 +15,7 @@ func NewPushClient(conn *websocket.Conn) *PushClient {
 	return client
 }
 
-func (this *PushClient) Try() {
+func (this *PushClient) ReadMessage()  {
 	for {
 		_, originData, err := this.wsConn.ReadMessage()
 		if err != nil {
@@ -31,6 +31,15 @@ func (this *PushClient) Try() {
 			pushClientManager.addClientChannel <- this
 		case MESSAGE_KILL_ME:
 			pushClientManager.deleteClientChannel <- this
+		}
+	}
+}
+
+func (this *PushClient) Try() {
+	for {
+		select {
+		case message := <- this.writeChannel:
+			this.wsConn.WriteMessage(websocket.TextMessage, message.OriginData)
 		}
 	}
 }
