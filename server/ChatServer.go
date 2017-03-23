@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 	"github.com/gorilla/websocket"
-	"github.com/cplusgo/go-library"
 )
 
 type ChatServer struct {
@@ -38,5 +37,6 @@ func (this *ChatServer) accept(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	wsHandler := NewChatClient(conn)
-	go_library.Run(wsHandler)
+	wsHandler.Try()
+	go wsHandler.readMessage()
 }

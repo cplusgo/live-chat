@@ -27,6 +27,7 @@ func (this *ChatClient) close() {
 		this.wsConn.Close()
 		this.stopChannel <- true
 		roomManager.deleteClientChannel <- this
+		close(this.stopChannel)
 	}
 }
 
@@ -88,6 +89,12 @@ func (this *ChatClient) isWritable() bool {
 }
 
 func (this *ChatClient) Try() {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Println("客户端主动断开连接")
+			this.close()
+		}
+	}()
 	for {
 		select {
 		case message := <-this.writeChannel:
@@ -96,8 +103,4 @@ func (this *ChatClient) Try() {
 			return
 		}
 	}
-}
-
-func (this *ChatClient) Catch(err interface{}) {
-	this.close()
 }
