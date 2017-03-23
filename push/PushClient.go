@@ -32,7 +32,10 @@ func (this *PushClient) ReadMessage() {
 		json.Unmarshal(originData, &message)
 		switch(message.ProtocolId) {
 		case protocols.MESSAGE_BROADCAST_PID:
-			pushClientManager.broadcastChannel <- &message
+			var pushMessage protocols.PushMessageVo
+			pushMessage.From = this
+			pushMessage.Data = message.Body
+			pushClientManager.broadcastChannel <- &pushMessage
 		case protocols.REGISTER_PUSH_SERVER_PID:
 			pushClientManager.addClientChannel <- this
 		case protocols.UNREGISTER_PUSH_SERVRE_PID:

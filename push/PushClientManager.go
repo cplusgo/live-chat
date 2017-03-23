@@ -50,9 +50,10 @@ func (this *PushClientManager) deleteClient(client *PushClient) {
 }
 
 func (this *PushClientManager) broadcast(message *protocols.PushMessageVo) {
+	data := []byte(message.Data)
 	for _, client := range this.clients {
 		if client != message.From {
-			client.writeChannel <- message.Data
+			client.writeChannel <- data
 		}
 	}
 }
