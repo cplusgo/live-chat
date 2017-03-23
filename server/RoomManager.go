@@ -1,9 +1,12 @@
 package server
 
-import "errors"
+import (
+	"errors"
+	"github.com/cplusgo/live-chat/protocols"
+)
 
 type RoomManager struct {
-	rooms map[int64]*ChatChannel
+	rooms map[int]*ChatRoom
 	deleteClientChannel chan *ChatClient
 	addClientChannel    chan *ChatClient
 }
@@ -11,7 +14,7 @@ type RoomManager struct {
 func NewRoomManager() *RoomManager {
 	deleteChan := make(chan *ChatClient)
 	addChan := make(chan *ChatClient)
-	rooms := make(map[int64]*ChatChannel)
+	rooms := make(map[int]*ChatRoom)
 	manager := &RoomManager{
 		deleteClientChannel:deleteChan,
 		addClientChannel:addChan,
@@ -34,12 +37,12 @@ func (this *RoomManager) Run()  {
 
 func (this *RoomManager) addClient(client *ChatClient) {
 	if _, ok := this.rooms[client.roomId]; !ok {
-		this.rooms[client.roomId] = NewChatChannel(client.roomId)
+		this.rooms[client.roomId] = NewChatRoom(client.roomId)
 	}
 	this.rooms[client.roomId].add(client)
 }
 
-func (this *RoomManager) sendMessage(roomId int64, message *ChatMessage)  {
+func (this *RoomManager) sendMessage(roomId int, message *protocols.ChatMessage)  {
 	if room, ok := this.rooms[roomId]; ok {
 		room.broadcastChannel <- message
 	}
@@ -51,7 +54,7 @@ func (this *RoomManager) removeClient(client *ChatClient)  {
 	}
 }
 
-func (this *RoomManager) GetRoom(roomId int64) (*ChatChannel, error)  {
+func (this *RoomManager) GetRoom(roomId int) (*ChatRoom, error)  {
 	if _, ok := this.rooms[roomId]; ok {
 		return this.rooms[roomId], nil
 	}
