@@ -42,7 +42,7 @@ func (this *RoomManager) addClient(client *ChatClient) {
 	this.rooms[client.roomId].add(client)
 }
 
-func (this *RoomManager) sendMessage(roomId int, message *protocols.ChatMessage)  {
+func (this *RoomManager) sendMessage(roomId int, message *protocols.ChatMessageVo)  {
 	if room, ok := this.rooms[roomId]; ok {
 		room.broadcastChannel <- message
 	}

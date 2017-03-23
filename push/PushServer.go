@@ -26,16 +26,17 @@ func (this *PushServer) Start() {
 	flag.Parse()
 	log.SetFlags(0)
 	http.HandleFunc("/websocket", this.accept)
-	var addr = flag.String("addr", "localhost:8080", "http service address")
+	var addr = flag.String("addr", "localhost:8081", "http service address")
 	log.Fatal(http.ListenAndServe(*addr, nil))
 }
 
 func (this *PushServer) accept(w http.ResponseWriter, r *http.Request) {
 	conn, err := this.upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Print("upgrade:", err)
+		log.Print("PushServer.accept:", err)
 		return
 	}
 	wsHandler := NewPushClient(conn)
-	go_library.Run(wsHandler)
+	wsHandler.waitMessage()
+	go wsHandler.ReadMessage()
 }

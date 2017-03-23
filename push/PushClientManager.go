@@ -1,16 +1,18 @@
 package push
 
+import "github.com/cplusgo/live-chat/protocols"
+
 type PushClientManager struct {
 	clients             map[*PushClient]*PushClient
 	addClientChannel    chan *PushClient
 	deleteClientChannel chan *PushClient
-	broadcastChannel    chan *PushMessage
+	broadcastChannel    chan *protocols.PushMessageVo
 }
 
 func NewPushClientManager() *PushClientManager {
 	addChannel := make(chan *PushClient)
 	deleteChannel := make(chan *PushClient)
-	broadcastChannel := make(chan *PushMessage)
+	broadcastChannel := make(chan *protocols.PushMessageVo)
 	clients := make(map[*PushClient]*PushClient)
 
 	manager := &PushClientManager{
@@ -47,10 +49,10 @@ func (this *PushClientManager) deleteClient(client *PushClient) {
 	}
 }
 
-func (this *PushClientManager) broadcast(message *PushMessage) {
+func (this *PushClientManager) broadcast(message *protocols.PushMessageVo) {
 	for _, client := range this.clients {
 		if client != message.From {
-			client.writeChannel <- message
+			client.writeChannel <- message.Data
 		}
 	}
 }

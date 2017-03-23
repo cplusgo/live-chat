@@ -34,7 +34,7 @@ func (this *ChatServer) Start() {
 func (this *ChatServer) accept(w http.ResponseWriter, r *http.Request) {
 	conn, err := this.upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Print("upgrade:", err)
+		log.Println("ChatServer.accept:", err)
 		return
 	}
 	wsHandler := NewChatClient(conn)

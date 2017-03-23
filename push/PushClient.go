@@ -3,11 +3,13 @@ package push
 import (
 	"github.com/gorilla/websocket"
 	"encoding/json"
+	"log"
+	"github.com/cplusgo/live-chat/protocols"
 )
 
 type PushClient struct {
 	wsConn       *websocket.Conn
-	writeChannel chan *PushMessage
+	writeChannel chan []byte
 }
 
 func NewPushClient(conn *websocket.Conn) *PushClient {
@@ -15,39 +17,44 @@ func NewPushClient(conn *websocket.Conn) *PushClient {
 	return client
 }
 
-func (this *PushClient) ReadMessage()  {
+func (this *PushClient) ReadMessage() {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Println("客户端主动断开连接")
+		}
+	}()
 	for {
 		_, originData, err := this.wsConn.ReadMessage()
 		if err != nil {
 			break
 		}
-		var message PushMessage
+		var message protocols.BaseMessageVo
 		json.Unmarshal(originData, &message)
-		message.From = this
 		switch(message.ProtocolId) {
-		case MESSAGE_BROATCAST:
+		case protocols.MESSAGE_BROADCAST_PID:
 			pushClientManager.broadcastChannel <- &message
-		case MESSAGE_REGISTER:
+		case protocols.REGISTER_PUSH_SERVER_PID:
 			pushClientManager.addClientChannel <- this
-		case MESSAGE_KILL_ME:
+		case protocols.UNREGISTER_PUSH_SERVRE_PID:
 			pushClientManager.deleteClientChannel <- this
 		}
 	}
 }
 
-func (this *PushClient) Try() {
+func (this *PushClient) waitMessage() {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Println("客户端主动断开连接")
+		}
+	}()
 	for {
 		select {
-		case message := <- this.writeChannel:
-			this.wsConn.WriteMessage(websocket.TextMessage, message.OriginData)
+		case message := <-this.writeChannel:
+			this.wsConn.WriteMessage(websocket.TextMessage, message)
 		}
 	}
 }
 
-func (this *PushClient) register()  {
-	
-}
-
-func (this *PushClient) Catch(err interface{}) {
+func (this *PushClient) register() {
 
 }

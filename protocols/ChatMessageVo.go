@@ -1,5 +1,5 @@
 package protocols
 
-type ChatMessage struct {
+type ChatMessageVo struct {
 	Content string `json:"content"`
 }

@@ -7,18 +7,18 @@ import (
 )
 
 type ChatRoom struct {
-	roomId              int
-	clients             map[*ChatClient]*ChatClient
-	broadcastChannel    chan *protocols.ChatMessage
+	roomId           int
+	clients          map[*ChatClient]*ChatClient
+	broadcastChannel chan *protocols.ChatMessageVo
 }
 
 func NewChatRoom(roomId int) *ChatRoom {
 	clients := make(map[*ChatClient]*ChatClient)
-	broadcastChan := make(chan *protocols.ChatMessage)
+	broadcastChan := make(chan *protocols.ChatMessageVo)
 	chatroom := &ChatRoom{
-		roomId:              roomId,
-		clients:             clients,
-		broadcastChannel:    broadcastChan,
+		roomId:           roomId,
+		clients:          clients,
+		broadcastChannel: broadcastChan,
 	}
 	go chatroom.run()
 	return chatroom
@@ -43,7 +43,7 @@ func (this *ChatRoom) run() {
 	}
 }
 
-func (this *ChatRoom) broadcastMessage(message *protocols.ChatMessage) {
+func (this *ChatRoom) broadcastMessage(message *protocols.ChatMessageVo) {
 	data, err := json.Marshal(message)
 	if err != nil {
 		log.Println(err.Error())

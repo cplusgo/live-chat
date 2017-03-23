@@ -44,29 +44,29 @@ func (this *ChatClient) readMessage() {
 			break
 		}
 		log.Println(string(bytes))
-		var message protocols.BaseMessage
+		var message protocols.BaseMessageVo
 		err = json.Unmarshal(bytes, &message)
 		if err != nil {
 			log.Println(err)
 		} else {
 			protocolId := message.ProtocolId
 			switch protocolId {
-			case protocols.ENTER_ROOM_ID:
+			case protocols.ENTER_ROOM_PID:
 				this.enterRoom(&message)
-			case protocols.CHAT_MESSAGE_ID:
+			case protocols.CHAT_MESSAGE_PID:
 				this.broadcastInRoom(&message)
 			}
 		}
 	}
 }
 
-func (this *ChatClient) broadcastInRoom(message *protocols.BaseMessage) {
-	var chatMessage protocols.ChatMessage
+func (this *ChatClient) broadcastInRoom(message *protocols.BaseMessageVo) {
+	var chatMessage protocols.ChatMessageVo
 	json.Unmarshal([]byte(message.Body), &chatMessage)
 	roomManager.sendMessage(this.roomId, &chatMessage)
 }
 
-func (this *ChatClient) enterRoom(message *protocols.BaseMessage) {
+func (this *ChatClient) enterRoom(message *protocols.BaseMessageVo) {
 	var enterRoomMessage protocols.EnterRoomMessage
 	json.Unmarshal([]byte(message.Body), &enterRoomMessage)
 	this.roomId = enterRoomMessage.RoomId
