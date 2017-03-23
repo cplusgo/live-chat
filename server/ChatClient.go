@@ -5,18 +5,17 @@ import (
 	"encoding/json"
 	"log"
 	"github.com/cplusgo/live-chat/protocols"
-	"fmt"
 )
 
 type ChatClient struct {
 	wsConn       *websocket.Conn
 	roomId       int
-	writeChannel chan *protocols.ChatMessage
+	writeChannel chan []byte
 	stopChannel  chan bool
 }
 
 func NewChatClient(conn *websocket.Conn) *ChatClient {
-	writeChannel := make(chan *protocols.ChatMessage)
+	writeChannel := make(chan []byte)
 	stopChannel := make(chan bool)
 	client := &ChatClient{wsConn: conn, writeChannel: writeChannel, stopChannel: stopChannel}
 	go client.readMessage()
@@ -78,7 +77,6 @@ func (this *ChatClient) writeMessage(message []byte) {
 	if !this.isWritable() {
 		return
 	}
-
 	err := this.wsConn.WriteMessage(websocket.TextMessage, message)
 	if err != nil {
 		this.close()
@@ -93,13 +91,7 @@ func (this *ChatClient) Try() {
 	for {
 		select {
 		case message := <-this.writeChannel:
-			fmt.Println(message.Content)
-			data, err := json.Marshal(message)
-			if err != nil {
-				log.Println(err.Error())
-				return
-			}
-			this.writeMessage(data)
+			this.writeMessage(message)
 		case <-this.stopChannel:
 			return
 		}

@@ -1,6 +1,10 @@
 package server
 
-import "github.com/cplusgo/live-chat/protocols"
+import (
+	"github.com/cplusgo/live-chat/protocols"
+	"encoding/json"
+	"log"
+)
 
 type ChatRoom struct {
 	roomId              int
@@ -40,7 +44,12 @@ func (this *ChatRoom) run() {
 }
 
 func (this *ChatRoom) broadcastMessage(message *protocols.ChatMessage) {
+	data, err := json.Marshal(message)
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
 	for _, client := range this.clients {
-		client.writeChannel <- message
+		client.writeChannel <- data
 	}
 }
