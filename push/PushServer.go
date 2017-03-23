@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"flag"
 	"log"
-	"github.com/cplusgo/go-library"
 )
 
 type PushServer struct {
