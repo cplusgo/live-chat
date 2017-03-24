@@ -17,7 +17,7 @@ func NewPushServer() *PushServer {
 			return true
 		},
 	}
-	pushServer := &PushServer{upgrader:upgrader}
+	pushServer := &PushServer{upgrader: upgrader}
 	return pushServer
 }
 
@@ -35,7 +35,5 @@ func (this *PushServer) accept(w http.ResponseWriter, r *http.Request) {
 		log.Print("PushServer.accept:", err)
 		return
 	}
-	wsHandler := NewPushClient(conn)
-	wsHandler.waitMessage()
-	go wsHandler.ReadMessage()
+	startPushClient(conn)
 }

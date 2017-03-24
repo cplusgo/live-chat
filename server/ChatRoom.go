@@ -12,7 +12,7 @@ type ChatRoom struct {
 	broadcastChannel chan *protocols.ChatMessageVo
 }
 
-func NewChatRoom(roomId int) *ChatRoom {
+func createChatRoom(roomId int) *ChatRoom {
 	clients := make(map[*ChatClient]*ChatClient)
 	broadcastChan := make(chan *protocols.ChatMessageVo)
 	chatroom := &ChatRoom{

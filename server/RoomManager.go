@@ -11,7 +11,7 @@ type RoomManager struct {
 	addClientChannel    chan *ChatClient
 }
 
-func NewRoomManager() *RoomManager {
+func createRoomManager() *RoomManager {
 	deleteChan := make(chan *ChatClient)
 	addChan := make(chan *ChatClient)
 	rooms := make(map[int]*ChatRoom)
@@ -20,11 +20,11 @@ func NewRoomManager() *RoomManager {
 		addClientChannel:addChan,
 		rooms:rooms,
 	}
-	go manager.Run()
+	go manager.run()
 	return manager
 }
 
-func (this *RoomManager) Run()  {
+func (this *RoomManager) run()  {
 	for {
 		select {
 		case client := <-this.deleteClientChannel:
@@ -37,7 +37,7 @@ func (this *RoomManager) Run()  {
 
 func (this *RoomManager) addClient(client *ChatClient) {
 	if _, ok := this.rooms[client.roomId]; !ok {
-		this.rooms[client.roomId] = NewChatRoom(client.roomId)
+		this.rooms[client.roomId] = createChatRoom(client.roomId)
 	}
 	this.rooms[client.roomId].add(client)
 }
@@ -54,11 +54,11 @@ func (this *RoomManager) removeClient(client *ChatClient)  {
 	}
 }
 
-func (this *RoomManager) GetRoom(roomId int) (*ChatRoom, error)  {
+func (this *RoomManager) getRoomById(roomId int) (*ChatRoom, error)  {
 	if _, ok := this.rooms[roomId]; ok {
 		return this.rooms[roomId], nil
 	}
 	return nil, errors.New("chat room not exist")
 }
 
-var roomManager *RoomManager = NewRoomManager()
+var roomManager *RoomManager = createRoomManager()

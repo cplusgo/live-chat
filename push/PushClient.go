@@ -12,8 +12,10 @@ type PushClient struct {
 	writeChannel chan []byte
 }
 
-func NewPushClient(conn *websocket.Conn) *PushClient {
+func startPushClient(conn *websocket.Conn) *PushClient {
 	client := &PushClient{}
+	go client.ReadMessage()
+	client.waitMessage()
 	return client
 }
 

@@ -36,7 +36,5 @@ func (this *ChatServer) accept(w http.ResponseWriter, r *http.Request) {
 		log.Println("ChatServer.accept:", err)
 		return
 	}
-	wsHandler := NewChatClient(conn)
-	wsHandler.Try()
-	go wsHandler.readMessage()
+	startChatClient(conn)
 }
