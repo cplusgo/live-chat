@@ -1,4 +1,4 @@
-package push
+package master
 
 import (
 	"github.com/gorilla/websocket"
@@ -35,7 +35,6 @@ func (this *PushClient) ReadMessage() {
 		switch(message.ProtocolId) {
 		case protocols.MESSAGE_BROADCAST_PID:
 			var pushMessage protocols.PushMessageVo
-			pushMessage.From = this
 			pushMessage.Data = message.Body
 			pushClientManager.broadcastChannel <- &pushMessage
 		case protocols.REGISTER_PUSH_SERVER_PID:

@@ -1,4 +1,4 @@
-package push
+package master
 
 import "github.com/cplusgo/live-chat/protocols"
 
@@ -52,9 +52,7 @@ func (this *PushClientManager) deleteClient(client *PushClient) {
 func (this *PushClientManager) broadcast(message *protocols.PushMessageVo) {
 	data := []byte(message.Data)
 	for _, client := range this.clients {
-		if client != message.From {
-			client.writeChannel <- data
-		}
+		client.writeChannel <- data
 	}
 }
 

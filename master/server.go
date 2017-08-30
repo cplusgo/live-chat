@@ -1,4 +1,4 @@
-package push
+package master
 
 import (
 	"github.com/gorilla/websocket"

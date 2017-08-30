@@ -1,4 +1,4 @@
-package server
+package slave
 
 import (
 	"github.com/cplusgo/live-chat/protocols"

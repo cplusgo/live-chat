@@ -1,4 +1,4 @@
-package server
+package slave
 
 import (
 	"github.com/gorilla/websocket"
