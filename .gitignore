@@ -2,6 +2,8 @@ idea
 /.idea
 /idea
 test/
+/deploy
+deploy
 # Compiled Object files, Static and Dynamic libs (Shared Objects)
 *.o
 *.a
