@@ -1,4 +1,4 @@
-package slave
+package channel
 
 import (
 	"flag"
@@ -7,12 +7,12 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-type ChatServer struct {
+type ChannelServer struct {
 	upgrader websocket.Upgrader
 }
 
-func NewChatServer() *ChatServer {
-	chatServer := &ChatServer{
+func NewChannelServer() *ChannelServer {
+	chatServer := &ChannelServer{
 		upgrader: websocket.Upgrader{
 			CheckOrigin: func(r *http.Request) bool {
 				return true
@@ -22,7 +22,7 @@ func NewChatServer() *ChatServer {
 	return chatServer
 }
 
-func (this *ChatServer) Start() {
+func (this *ChannelServer) Start() {
 	flag.Parse()
 	log.SetFlags(0)
 	http.HandleFunc("/websocket", this.accept)
@@ -30,10 +30,10 @@ func (this *ChatServer) Start() {
 	log.Fatal(http.ListenAndServe(*addr, nil))
 }
 
-func (this *ChatServer) accept(w http.ResponseWriter, r *http.Request) {
+func (this *ChannelServer) accept(w http.ResponseWriter, r *http.Request) {
 	conn, err := this.upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Println("ChatServer.accept:", err)
+		log.Println("ChannelServer.accept:", err)
 		return
 	}
 	startChatClient(conn)
