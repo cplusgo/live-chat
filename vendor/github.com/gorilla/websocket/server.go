@@ -32,7 +32,7 @@ type Upgrader struct {
 	// do not limit the size of the messages that can be sent or received.
 	ReadBufferSize, WriteBufferSize int
 
-	// Subprotocols specifies the server's supported protocols in order of
+	// Subprotocols specifies the server's supported message in order of
 	// preference. If this field is set, then the Upgrade method negotiates a
 	// subprotocol by selecting the first match in this list with a protocol
 	// requested by the client.

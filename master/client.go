@@ -4,7 +4,7 @@ import (
 	"github.com/gorilla/websocket"
 	"encoding/json"
 	"log"
-	"github.com/cplusgo/live-chat/protocols"
+	"github.com/cplusgo/live-chat/message"
 )
 
 type PushClient struct {

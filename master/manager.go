@@ -1,6 +1,6 @@
 package master
 
-import "github.com/cplusgo/live-chat/protocols"
+import "github.com/cplusgo/live-chat/message"
 
 type PushClientManager struct {
 	clients             map[*PushClient]*PushClient
